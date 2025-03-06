@@ -1,0 +1,338 @@
+.details {
+  padding: 0 20px;
+  margin-bottom: 100px;
+}
+.details .top {
+  padding: 40px 0;
+  position: relative;
+  text-align: center;
+}
+.details .top h1 {
+  font-size: 23px;
+}
+.details .top svg {
+  position: absolute;
+  left: 0;
+  top: 41px;
+  width: 20px;
+  cursor: pointer;
+}
+.details .title {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+.details .category,
+.details .location {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.details .status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+}
+.details .status p {
+  position: relative;
+  background-color: #d9d9d9;
+  width: 65px;
+  height: 30px;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+.details .category div {
+  font-size: 20px;
+}
+.details .category span {
+  color: #fff;
+  font-weight: bold;
+  padding: 4px 20px;
+  border-radius: 20px;
+  font-size: 15px;
+}
+.details .category .left span {
+  background-color: var(--primary-color);
+}
+.details .category .right span {
+  background-color: #d9d9d9;
+}
+
+.details .status p span {
+  transition: 0.2s;
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  background-color: #fff;
+  display: block;
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.details .title .icon {
+  background-color: #d9d9d9;
+  width: 53px;
+  height: 53px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 9px;
+  margin-right: 10px;
+}
+.details .createdBy {
+  margin: 10px 0;
+  color: #c0c0c0;
+}
+.details .location div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #4c4c4c;
+}
+
+.details .description {
+  margin: 10px 0;
+}
+.details .google_map {
+  margin: 20px 0;
+  height: 500px;
+}
+.details .google_map .map {
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+.details .seePhoto {
+  width: 100%;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  background-color: #000;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px;
+  font-weight: bold;
+  gap: 10px;
+}
+.details .res-num {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+  gap: 10px;
+  font-size: 20px;
+}
+.details .res-num img {
+  width: 20px;
+}
+.details .btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.details .btn button {
+  cursor: pointer;
+  padding: 10px 40px;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 10px;
+}
+.details .btn .respond {
+  background-color: var(--primary-color);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.details .btn button.dismiss {
+  background-color: #f4f0ef;
+  color: #333333;
+}
+.details .timeLine h2 {
+  margin: 30px 0;
+}
+.details .timeLine .timeline_box {
+  display: flex;
+  gap: 25px;
+  margin-bottom: 45px;
+}
+.details .timeLine .timeline_box .image {
+  position: relative;
+}
+.details .timeLine .timeline_box img {
+  width: 30px;
+}
+.details .timeLine .timeline_box .image::before,
+.details .timeLine .timeline_box .image::after {
+  position: absolute;
+  width: 2px;
+  content: "";
+  background-color: #543b3b;
+}
+.details .timeLine .timeline_box .image::before {
+  top: 34px;
+  left: 13px;
+  width: 2px;
+  height: 39px;
+}
+
+.details .timeLine .timeline_box .image::after {
+  top: 78px;
+  left: 13px;
+  height: 12px;
+}
+.details .timeLine .timeline_box h3 {
+  color: #4c4c4c;
+}
+.details .timeLine .timeline_box p {
+  margin-top: 10px;
+  color: #c0c0c0;
+}
+
+.details .responders h2 {
+  margin: 40px 0;
+}
+.details .responder {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 20px 0;
+  color: #4c4c4c;
+}
+.details .responder .image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.details .responder .image img {
+  width: 100%;
+  height: 100%;
+}
+.details .responder .info p {
+  color: #c0c0c0;
+}
+.details .showImage {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #eeeeee73;
+}
+.details .showImage .image {
+  width: 380px;
+  position: relative;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.details .showImage img {
+  width: 100%;
+  border-radius: 10px;
+}
+.details .showImage .close {
+  position: absolute;
+  top: 262px;
+  right: 30px;
+  z-index: 200;
+  background-color: #fff;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 3px 3px #7777;
+}
+.details .showImage .close svg {
+  width: 25px;
+  height: 25px;
+}
+.details .form {
+  display: flex;
+  position: relative;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+.details .form .image_profile {
+  width: 50px;
+  border-radius: 50%;
+  height: 50px;
+}
+.details .form input {
+  outline: none;
+  background-color: #f0f0f2;
+  border: none;
+  border-radius: 10px;
+  width: 80%;
+  padding: 10px 20px;
+}
+.details .form .sendComment {
+  width: 30px;
+  height: 30px;
+  outline: none;
+  border: none;
+  position: absolute;
+  right: 12px;
+  top: 9px;
+  cursor: pointer;
+  background-color: #fff;
+  border-radius: 50%;
+  padding: 4px;
+}
+.details .form .icon {
+  width: 100%;
+}
+.details .form .sendComment:focus {
+  outline: 1px solid #000;
+}
+.details .comments {
+  margin-top: 20px;
+}
+.details .comments h2 {
+  font-weight: normal;
+  font-size: 14px;
+}
+.details .comment {
+  transform-origin: left center;
+  display: flex;
+  gap: 15px;
+}
+.details .comment .right {
+  flex: 1;
+}
+.details .comment .right .content {
+  position: relative;
+  margin: 10px 0;
+  background-color: #f6f6f6;
+  padding: 15px 10px;
+  border-radius: 7px;
+  font-weight: 300;
+  font-size: 15px;
+}
+.details .comment .right .content::after {
+  position: absolute;
+  content: "";
+  left: -20px;
+  top: 6px;
+  border: 11px solid;
+  border-color: transparent #f6f6f6 transparent transparent;
+}
+.details .comment .right .time {
+  text-align: end;
+}
+.details .comment img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}

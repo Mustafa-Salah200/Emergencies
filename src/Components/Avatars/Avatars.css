@@ -1,0 +1,22 @@
+.avatars {
+  position: relative;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #f6f6f6;
+  transform: translate(50%, 197px);
+  box-shadow: 0 0 3px 1px #ddd;
+  max-width: 400px;
+}
+.avatars img {
+    background-color: #eee;
+    width: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.avatars img:hover {
+    background-color: #123;
+}
