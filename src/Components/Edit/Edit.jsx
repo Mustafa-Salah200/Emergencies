@@ -3,8 +3,9 @@ import { useContext, useState } from "react";
 import "./Edit.css";
 import { ContextProvider } from "../../context/ContextApi";
 import file_icon from "../../assets/file_icon.svg";
-import back from './images/back.svg'
+import back from "./images/back.svg";
 import axios from "axios";
+import { API_BASE } from "../../api";
 
 const Edit = ({ setEdit }) => {
   const { user, UpdateUser } = useContext(ContextProvider);
@@ -16,94 +17,107 @@ const Edit = ({ setEdit }) => {
   });
 
   const HandleInput = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
+    const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-  const HandleUpload = async (e) => {
+
+  // Upload photo then update the user's image field in DB
+  const HandleUpload = async (file) => {
     const formdata = new FormData();
-    formdata.append("file", e);
-    axios
-      .post(`http://localhost:4000/api/v1/upload/${user._id}`, formdata)
-      .then(() => UpdateTheUser(e))
-      .catch((err) => console.log(err));
-  };
-  const UpdateTheUser = async (e) => {
-    const response = await fetch(
-      `http://localhost:4000/api/v1/users/${user._id}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ image: e.name }),
-      }
-    );
-    const json = await response.json();
-    if (response.ok) {
-      UpdateUser(json.data);
-    } else {
-      setError("error");
+    formdata.append("file", file);
+    try {
+      await axios.post(`${API_BASE}/upload/${user._id}`, formdata);
+      await UpdateImageField(file.name);
+    } catch (err) {
+      console.error("Upload failed:", err);
+      setError("Photo upload failed. Please try again.");
     }
   };
+
+  const UpdateImageField = async (imageName) => {
+    try {
+      const response = await fetch(`${API_BASE}/users/${user._id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ image: imageName }),
+      });
+      const json = await response.json();
+      if (response.ok) {
+        UpdateUser(json.data);
+      } else {
+        setError("Failed to update profile image.");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Failed to update profile image.");
+    }
+  };
+
   const UpdateUserInfo = async () => {
-    const response = await fetch(
-      `http://localhost:4000/api/v1/users/${user._id}`,
-      {
+    try {
+      const response = await fetch(`${API_BASE}/users/${user._id}`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
+      });
+      const json = await response.json();
+      if (response.ok) {
+        UpdateUser(json.data);
+        setError(null);
+        setEdit();
+      } else {
+        // Safely extract duplicate key error message
+        if (json.message && typeof json.message === "object" && json.message.keyPattern) {
+          const keys = Object.keys(json.message.keyPattern);
+          setError(`The field "${keys[0]}" is already taken — try another`);
+        } else {
+          setError(json.message || "Update failed. Please try again.");
+        }
       }
-    );
-    const json = await response.json();
-    if (response.ok) {
-      UpdateUser(json.data);
-      setError(null)
-      setEdit()
-    } else {
-      const keys = Object.keys(json.message.keyPattern);
-      setError(`the field ${keys[0]} is used try to use another ${keys[0]}`);
+    } catch (err) {
+      console.error(err);
+      setError("Network error. Please try again.");
     }
   };
+
   const HandleSubmit = () => {
-    if (
-      formData.name !== "" ||
-      formData.email !== "" ||
-      formData.password !== ""
-    ) {
-      UpdateUserInfo();
+    if (formData.name === "" || formData.email === "") {
+      setError("Name and email cannot be empty.");
+      return;
     }
+    UpdateUserInfo();
   };
+
   return (
     <div className="edit">
       <div className="title">
-        <div className="back" onClick={() => setEdit()}>
-          <img src={back} alt="" />
+        <div className="back" onClick={setEdit}>
+          <img src={back} alt="Back" />
         </div>
-        <h2>Edit</h2>
+        <h2>Edit Profile</h2>
       </div>
 
       <div className="image">
         <img
-          src={`src/assets/Avatar/${user.image}.svg`}
-          // src={`http://localhost:4000/images/${user._id}/${user.image}`}
-          alt=""
+          src={`/src/assets/Avatar/${user.image}.svg`}
+          alt={user.name}
+          onError={(e) => { e.target.style.display = "none"; }}
         />
         <div className="file-upload">
           <input
             type="file"
             id="upload"
+            accept="image/*"
             onChange={(e) => {
-              HandleUpload(e.target.files[0]);
+              if (e.target.files[0]) HandleUpload(e.target.files[0]);
             }}
           />
           <label htmlFor="upload">
-            <img src={file_icon} alt="" />
+            <img src={file_icon} alt="Upload" />
           </label>
         </div>
       </div>
+
       <div className="form">
         <div className="input">
           <label htmlFor="name">Name</label>
@@ -112,32 +126,32 @@ const Edit = ({ setEdit }) => {
             type="text"
             name="name"
             defaultValue={formData.name}
-            onChange={(e) => HandleInput(e)}
+            onChange={HandleInput}
           />
         </div>
         <div className="input">
-          <label htmlFor="name">Email</label>
+          <label htmlFor="email">Email</label>
           <input
             id="email"
-            type="text"
+            type="email"
             name="email"
             defaultValue={formData.email}
-            onChange={(e) => HandleInput(e)}
+            onChange={HandleInput}
           />
         </div>
         <div className="input">
-          <label htmlFor="name">Phone</label>
+          <label htmlFor="phone">Phone</label>
           <input
             id="phone"
             type="text"
             name="phone"
             defaultValue={formData.phone}
-            onChange={(e) => HandleInput(e)}
+            onChange={HandleInput}
           />
         </div>
 
         {error && <p className="error">{error}</p>}
-        <button onClick={() => HandleSubmit()}>Update</button>
+        <button onClick={HandleSubmit}>Update</button>
       </div>
     </div>
   );

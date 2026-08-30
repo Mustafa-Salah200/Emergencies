@@ -1,96 +1,65 @@
-.profile {
-    padding: 0 10px;
-    max-width: var(--max-width);
-    margin: 0 auto;
+/* ── Profile Page ────────────────────────────────────────────────────────── */
+.profile { padding-bottom: 40px; }
+
+.profile .profile-hero {
+  display: flex; align-items: center; gap: 24px;
+  padding: 28px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-bottom: 24px;
 }
-.profile .title {
-    width: fit-content;
-    margin: 40px auto;
+.profile .profile-hero .avatar {
+  width: 80px; height: 80px; border-radius: 50%;
+  overflow: hidden; flex-shrink: 0;
+  border: 3px solid var(--red);
+  box-shadow: 0 0 20px var(--red-glow);
 }
-.profile .top {
-    text-align: center;
+.profile .profile-hero .avatar img { width: 100%; height: 100%; object-fit: cover; }
+.profile .profile-hero .info { flex: 1; }
+.profile .profile-hero .info h1 { font-size: 1.4rem; font-weight: 800; margin-bottom: 4px; }
+.profile .profile-hero .info p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 14px; }
+.profile .profile-hero .info .hero-btns { display: flex; gap: 10px; }
+.profile .profile-hero .info .hero-btns button {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 18px; border-radius: var(--radius-sm);
+  font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all var(--transition);
 }
-.profile .top .image {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin: auto;
+.profile .profile-hero .info .hero-btns .btn-edit {
+  background: var(--red); color: #fff; border: none;
 }
-.profile .top .image img{
-    width: 100%;
-    height: 100%;
+.profile .profile-hero .info .hero-btns .btn-edit:hover { background: var(--red-dark); }
+.profile .profile-hero .info .hero-btns .btn-settings {
+  background: transparent; color: var(--text); border: 1px solid var(--border);
 }
-.profile .top h1 {
-    margin-top: 10px;
+.profile .profile-hero .info .hero-btns .btn-settings:hover { border-color: var(--red); color: var(--red); }
+.profile .profile-hero .info .hero-btns button img { width: 16px; filter: invert(1); }
+
+/* Stats strip */
+.profile .stats-strip {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px;
 }
-.profile .top p {
-    font-size: 22px;
-    color: #707070;
-    margin: 5px 0;
+.profile .stats-strip .stat-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px; text-align: center;
+  transition: all var(--transition);
 }
-.profile .btn {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 20px 0;
-    flex-wrap: wrap;
-    gap: 20px;  
-}
-.profile .btn button {
-    cursor: pointer;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 10px 15px;
-    color: #fff;
-    font-weight: bold;
-    border: none;
-    width: 166px;
-}
-.profile .btn .pro {
-    background-color: var(--primary-color);
-}
-.profile .btn .setting {
-    background-color: #333333;
-}
-.profile .status .content {
-    display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(150px,1fr));
-    gap: 25px;
-    margin: 20px 0;
-}
-.profile .status .content div {
-    background-color: #f6f6f6;
-    padding: 1rem;
-    border-radius: 7px;
-}
-.profile .status .content h1 {
-    font-size: 30px;
-}
-.profile .status .content h3 {
-    color: #333333;
-    margin-bottom: 13px;
-}
-.profile .status .content .ranking h1 {
-    color: red;
-    font-size: 25px;
-    width: fit-content;
-    border-radius: 50%;
-    background-color: #FFE0D4;
-    width: 38px;
-    height: 38px;
-    display: flex;
-    justify-content: center;
-    align-items: center ;
-}
-.profile .history h1 {
-    margin: 40px 0;
-}
-.profile .history .content {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+.profile .stats-strip .stat-card:hover { border-color: var(--red); transform: translateY(-2px); }
+.profile .stats-strip .stat-card h3 { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; font-weight: 500; }
+.profile .stats-strip .stat-card h1 { font-size: 1.8rem; font-weight: 800; color: var(--text); }
+.profile .stats-strip .stat-card.ranking h1 { font-size: 1.4rem; }
+.profile .stats-strip .stat-card.ranking h1.top { color: #10b981; }
+
+/* History sections */
+.profile .history-section { margin-bottom: 28px; }
+.profile .history-section h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; color: var(--text); }
+.profile .history-section .cards { display: flex; flex-direction: column; gap: 10px; }
+.profile .history-section .empty { color: var(--text-muted); font-size: 0.9rem; padding: 20px 0; }
+
+@media (max-width: 600px) {
+  .profile .stats-strip { grid-template-columns: repeat(2, 1fr); }
+  .profile .profile-hero { flex-direction: column; text-align: center; }
+  .profile .profile-hero .info .hero-btns { justify-content: center; }
 }

@@ -1,161 +1,120 @@
 /* eslint-disable react/prop-types */
-import account from "../../assets/account_icon.svg";
-import settings from "../../assets/settings.svg";
+import accountIcon from "../../assets/account_icon.svg";
+import settingsIcon from "../../assets/settings.svg";
 import "./Profile.css";
 import Emergence from "../Emergence/Emergence";
 import { useContext, useEffect, useState } from "react";
 import Settings from "../Settings/Settings";
 import Edit from "../Edit/Edit";
 import { ContextProvider } from "./../../context/ContextApi";
+import { API_BASE } from "../../api";
+import { motion } from "framer-motion";
 
 const Profile = () => {
   const [edit, setEdit] = useState(false);
-  const [settings, setSettings] = useState(false);
-  const [users, setUsers] = useState();
+  const [showSettings, setShowSettings] = useState(false);
+  const [users, setUsers] = useState([]);
   const { user } = useContext(ContextProvider);
-  const YourRanking = users && users.findIndex((ele) => ele.name === user.name);
+  const yourRanking = users.findIndex((ele) => ele.name === user?.name);
 
   useEffect(() => {
-    const FetchUsersData = async () => {
-      const response = await fetch("http://127.0.0.1:4000/api/v1/users/top");
-      const json = await response.json();
-      if (response.ok) {
-        setUsers(json.data);
-      }
+    const fetchUsers = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/users/top`);
+        const json = await res.json();
+        if (res.ok) setUsers(json.data);
+      } catch (e) { console.error(e); }
     };
-    FetchUsersData();
+    fetchUsers();
   }, [user]);
-  return (
-    <>
-      {edit ? (
-        <Edit setEdit={()=> setEdit(false)} />
-      ) : settings ? (
-        <SettingPage setSettings={setSettings} />
-      ) : (
-        <Profile2
-          setEdit={setEdit}
-          setSettings={setSettings}
-          YourRanking={YourRanking + 1}
-        />
-      )}
-    </>
-  );
+
+  if (edit) return <Edit setEdit={() => setEdit(false)} />;
+  if (showSettings) return <Settings setSettings={() => setShowSettings(false)} />;
+  return <ProfileMain setEdit={() => setEdit(true)} setSettings={() => setShowSettings(true)} yourRanking={yourRanking} />;
 };
 
 export default Profile;
 
-const Profile2 = ({ setSettings, setEdit, YourRanking }) => {
-  const [post, setPost] = useState();
-  const [response, setResponse] = useState();
+const ProfileMain = ({ setEdit, setSettings, yourRanking }) => {
+  const [post, setPost] = useState([]);
+  const [response, setResponse] = useState([]);
   const { user, data } = useContext(ContextProvider);
 
-
   useEffect(() => {
-    const Posts = data.filter((ele) => {
-      return ele.userId === user._id;
-    });
-    setPost(Posts);
-
-    const Response = [];
-    data.filter((ele) => {
-      ele.responders.filter((e) => {
-        if (e.userId === user._id) {
-          Response.push(ele);
-        }
-      });
-    });
-    setResponse(Response);
+    if (!user) return;
+    setPost(data.filter((e) => e.userId === user._id));
+    const res = [];
+    data.forEach((e) => e.responders.forEach((r) => { if (r.userId === user._id) res.push(e); }));
+    setResponse(res);
   }, [data, user]);
+
+  const rankDisplay = yourRanking >= 0 ? yourRanking + 1 : "—";
+  const isTopRank = yourRanking >= 0 && yourRanking < 3;
+
   return (
-    <section className="profile">
-      <h1 className="title">Profile</h1>
-      <div className="top">
-        <div className="image">
-          <img
-            src={`src/assets/Avatar/${user.image}.svg`}
-            // src={`http://localhost:4000/images/${user._id}/${user.image}`}
-            alt=""
-          />
+    <motion.section className="profile" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.35 }}>
+
+      {/* Hero */}
+      <div className="profile-hero">
+        <div className="avatar">
+          <img src={`/src/assets/Avatar/${user?.image}.svg`} alt={user?.name} onError={(e) => { e.target.style.display = "none"; }} />
         </div>
-        <h1>{user.name}</h1>
-        <p>Emergency Responder</p>
-      </div>
-
-      <div className="btn">
-        <button className="pro" onClick={() => setEdit(true)}>
-          <img src={account} alt="" />
-          Edit Profile
-        </button>
-        <button className="setting" onClick={() => setSettings(true)}>
-          <img src={settings} alt="" />
-          Settings
-        </button>
-      </div>
-
-      <div className="status">
-        <h3>Status</h3>
-        <div className="content">
-          <div className="">
-            <h3>Total Responses</h3>
-            <h1>1</h1>
-          </div>
-          <div className="">
-            <h3>Posts</h3>
-            <h1>{post && post.length}</h1>
-          </div>
-          <div className="">
-            <h3>Total Points</h3>
-            <h1>{user.point}</h1>
-          </div>
-          <div className="ranking">
-            <h3>Ranking</h3>
-            <h1
-              style={
-                YourRanking <= 3
-                  ? {
-                      color: "#0BDB11",
-                      backgroundColor: "#D4FFD5",
-                    }
-                  : {
-                      color: "#000",
-                      backgroundColor: "#eee",
-                    }
-              }
-            >
-              {YourRanking}
-            </h1>
+        <div className="info">
+          <h1>{user?.name}</h1>
+          <p>Emergency Responder</p>
+          <div className="hero-btns">
+            <button className="btn-edit" onClick={setEdit}>
+              <img src={accountIcon} alt="" />
+              Edit Profile
+            </button>
+            <button className="btn-settings" onClick={setSettings}>
+              <img src={settingsIcon} alt="" style={{ filter: "none" }} />
+              Settings
+            </button>
           </div>
         </div>
       </div>
 
-      <div className="history">
-        {post && post.length > 0 && (
-          <>
-            <h1>Post History</h1>
-            <div className="content">
-              {post.map((item, index) => {
-                return <Emergence key={index} data={item} status="null" />;
-              })}
-            </div>
-          </>
-        )}
-            <h1>Response History</h1>
-        {response && response.length > 0 && (
-          <>
-            <div className="content">
-              {response.map((item, index) => {
-                return <Emergence key={index} data={item} status="null" />;
-              })}
-            </div>
-          </>
-        )}
-     
+      {/* Stats */}
+      <div className="stats-strip">
+        <div className="stat-card">
+          <h3>Total Responses</h3>
+          <h1>{response.length}</h1>
+        </div>
+        <div className="stat-card">
+          <h3>Posts</h3>
+          <h1>{post.length}</h1>
+        </div>
+        <div className="stat-card">
+          <h3>Points Earned</h3>
+          <h1>{user?.point ?? 0}</h1>
+        </div>
+        <div className="stat-card ranking">
+          <h3>Ranking</h3>
+          <h1 className={isTopRank ? "top" : ""}>{rankDisplay}</h1>
+        </div>
       </div>
-    </section>
+
+      {/* Post history */}
+      <div className="history-section">
+        <h2>Post History</h2>
+        {post.length > 0 ? (
+          <div className="cards">
+            {post.map((item, i) => <Emergence key={i} data={item} status={item.type} />)}
+          </div>
+        ) : <p className="empty">No emergencies posted yet.</p>}
+      </div>
+
+      {/* Response history */}
+      <div className="history-section">
+        <h2>Response History</h2>
+        {response.length > 0 ? (
+          <div className="cards">
+            {response.map((item, i) => <Emergence key={i} data={item} status={item.type} />)}
+          </div>
+        ) : <p className="empty">No emergencies responded to yet.</p>}
+      </div>
+
+    </motion.section>
   );
-};
-
-
-const SettingPage = ({ setSettings }) => {
-  return <Settings setSettings={() => setSettings(false)} />;
 };

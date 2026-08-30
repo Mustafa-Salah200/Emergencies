@@ -1,57 +1,57 @@
+/* ── Emergency Card ──────────────────────────────────────────────────────── */
 .emergence {
-    display: flex;
-    justify-content: space-between;
-    cursor: pointer;
-    padding: 10px;
-    border-radius: 9px;
-    background-color: #f6f6f6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 16px 18px;
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  transition: all var(--transition);
+  gap: 12px;
 }
 .emergence:hover {
-    background-color: #e9e7e7;
+  border-color: rgba(229,52,42,0.35);
+  background: var(--surface-3);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.35);
 }
 .emergence .left {
-    display: flex;
-    align-items: center;
-    gap: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  min-width: 0;
 }
-.emergence .icon  {
-    background-color: #D9D9D9;
-    height: 53px;
-    width: 53px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 9px;
+.emergence .icon {
+  background: var(--red-glow);
+  border: 1px solid rgba(229,52,42,0.3);
+  height: 50px; width: 50px; flex-shrink: 0;
+  display: flex; justify-content: center; align-items: center;
+  border-radius: var(--radius-sm);
 }
-.emergence img {
-    width: 17px;
-}
+.emergence .icon img { width: 22px; }
+
 .emergence .emergence_content {
-    display: flex;
-    flex-direction: column;
+  display: flex; flex-direction: column; gap: 6px; min-width: 0;
 }
 .emergence .emergence_content h2 {
-    font-weight: normal;
-    text-align: start;
-    font-size: 18px;
+  font-weight: 600;
+  font-size: 0.97rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .emergence .emergence_content .info {
-    margin-top: 4px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #4C4C4C;
+  display: flex; align-items: center; gap: 16px; color: var(--text-muted);
 }
 .emergence .emergence_content .info div {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  display: flex; align-items: center; gap: 6px;
 }
-.emergence .emergence_content .info div span {
-    font-size: 14px;
-}
-.emergence .status img {
-    width: 15px;
-    height: 15px;
-    margin-top: 5px;
-}
+.emergence .emergence_content .info div img { width: 14px; opacity: 0.6; }
+.emergence .emergence_content .info div span { font-size: 0.8rem; }
+
+.emergence .status { flex-shrink: 0; }
+.emergence .status img { width: 14px; height: 14px; }

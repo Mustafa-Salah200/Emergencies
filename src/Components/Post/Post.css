@@ -1,98 +1,65 @@
+/* ── Post Emergency Page ─────────────────────────────────────────────────── */
 .post {
-    padding: 0 10px;
-    max-width: 450px;
-    margin: 0 auto 100px;
+  max-width: 600px;
 }
-.post .title {
-    margin: 60px auto 20px;
-    width: fit-content;
+
+.post .page-header { margin-bottom: 28px; }
+.post .page-header h1 { font-size: 1.6rem; font-weight: 800; }
+.post .page-header p { color: var(--text-muted); font-size: 0.9rem; margin-top: 4px; }
+
+.post-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 32px;
 }
-.post form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+
+/* ── Action buttons row ─────────────────────────────────────────────────── */
+.post .action-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
 }
-.post form .input {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+
+.post .file-upload-btn {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 18px;
+  background: var(--surface-3);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer; color: var(--text-muted);
+  font-size: 0.88rem; transition: all var(--transition);
+  position: relative; overflow: hidden;
 }
-.post form .input input,
-.post form .input textarea{
-    outline: none;
-    border: 1px solid #ddd;
-    background: #f7f7f7;
-    border-radius: 10px;
-    padding: 14px 10px;
-    margin: 10px 0;
+.post .file-upload-btn:hover { border-color: var(--red); color: var(--text); }
+.post .file-upload-btn.has-file { border-style: solid; border-color: var(--red); color: var(--text); }
+.post .file-upload-btn input[type="file"] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%;
 }
-.post form .input textarea {
-    max-width: 100%;
-    min-width: 100%;
-    max-height: 160px;
-    min-height: 160px;
+.post .file-upload-btn img { width: 18px; }
+
+.post .location-btn {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 18px;
+  background: var(--surface-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer; color: var(--text-muted);
+  font-size: 0.88rem; transition: all var(--transition);
 }
-.post form .input select {
-    outline: none;
-    border: 1px solid #ddd;
-    background: #f7f7f7;
-    border-radius: 10px;
-    padding: 14px 10px;
-    margin: 10px 0;
+.post .location-btn:hover:not(:disabled) { border-color: var(--red); color: var(--text); }
+.post .location-btn.located { border-color: #10b981; color: #34d399; }
+.post .location-btn img { width: 18px; }
+.post .location-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.post .submit-btn {
+  width: 100%; padding: 14px;
+  background: var(--red); color: #fff; border: none;
+  border-radius: var(--radius-sm); font-weight: 700;
+  font-size: 1rem; cursor: pointer; margin-top: 8px;
+  transition: all var(--transition);
+  box-shadow: 0 4px 18px var(--red-glow);
 }
-.post form .check {
-    display: flex;
-    gap: 10px;
-}
-.post form .submit {
-    width: 100%;
-}
-.post form .btn {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.post form .btn button ,
-.post form .submit {
-    cursor: pointer;
-    border: none;
-    color: #fff;
-    font-weight: bold;
-    border-radius: 10px;
-    padding: 10px 15px;
-}
-.post form .btn button {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    background-color: #333333;
-    color: #fff;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 10px;
-    padding: 10px 15px;
-}
-.post form .submit {
-    background-color: var(--primary-color);
-    text-align: center;
-    padding: 20px;
-}
-.post .file-upload {
-    display: inline-block;
-    color: #fff;
-    background-color: var(--primary-color);
-    cursor: pointer;
-    user-select: none;
-    text-align: center;
-    padding: 10px 15px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-}
-.post .file-upload input[type="file"] {
-    display: none;
-}
-.post .file-upload label {
-    cursor: pointer;
-}
+.post .submit-btn:hover { background: var(--red-dark); transform: translateY(-1px); }
+.post .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }

@@ -5,67 +5,82 @@ import two from "../../assets/two.svg";
 import three from "../../assets/three.svg";
 import { useContext, useEffect, useState } from "react";
 import { ContextProvider } from "../../context/ContextApi";
+import { API_BASE } from "../../api";
+import { motion } from "framer-motion";
+
+const MEDAL = { 1: one, 2: two, 3: three };
+const RANK_CLASS = { 1: "rank-1", 2: "rank-2", 3: "rank-3" };
 
 const Community = () => {
-  const [users, setUsers] = useState();
+  const [users, setUsers] = useState([]);
   const { user } = useContext(ContextProvider);
-  const YourRanking = users && users.findIndex((ele) => ele.name === user.name);
+  const yourRankingIndex = users.findIndex((ele) => ele.name === user?.name);
 
   useEffect(() => {
-    const FetchUsersData = async () => {
-      const response = await fetch("http://127.0.0.1:4000/api/v1/users/top");
-      const json = await response.json();
-      if (response.ok) {
-        setUsers(json.data);
-      }
+    const fetchUsers = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/users/top`);
+        const json = await res.json();
+        if (res.ok) setUsers(json.data);
+      } catch (e) { console.error(e); }
     };
-    FetchUsersData();
-  }, [user]);
+    fetchUsers();
+  }, []);
+
   return (
-    <section className="community">
-      <h1 className="title">Community</h1>
-      <h2>Leaderboard </h2>
-      <div className="leaderBoard">
-        {users &&
-          users.slice(0, 3).map((ele, index) => {
-            return <Box key={ele.name} data={ele} index={index + 1} />;
-          })}
+    <motion.section className="community" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.35 }}>
+
+      <div className="page-header">
+        <h1>Community</h1>
+        <p>See how you rank among fellow emergency responders</p>
       </div>
-      <h2>Your Ranking</h2>
-      {users && (
-        <Box
-          point={user.point}
-          data={users[YourRanking]}
-          index={YourRanking + 1}
-        />
-      )}
-    </section>
+
+      {/* Top 3 leaderboard */}
+      <div className="podium-section">
+        <h2>🏆 Top Responders</h2>
+        <div className="leaderBoard">
+          {users.slice(0, 5).map((ele, index) => (
+            <LeaderboardCard key={ele._id || ele.name} data={ele} rank={index + 1} />
+          ))}
+        </div>
+      </div>
+
+      {/* Your position */}
+      <div className="your-rank-section">
+        <h2>📍 Your Ranking</h2>
+        {yourRankingIndex >= 0 ? (
+          <LeaderboardCard data={users[yourRankingIndex]} rank={yourRankingIndex + 1} isYou />
+        ) : (
+          <p style={{ color: "var(--text-muted)", fontSize: "0.9rem" }}>
+            Respond to emergencies to earn points and appear on the leaderboard!
+          </p>
+        )}
+      </div>
+
+    </motion.section>
   );
 };
 
 export default Community;
 
-const Box = ({ data, index }) => {
-  console.log(data);
+const LeaderboardCard = ({ data, rank, isYou }) => {
+  if (!data) return null;
   return (
-    <div className="box">
-      <div className="left">
-        <div className="image">
-          <img src={`src/assets/Avatar/${data.image}.svg`} alt="" />
-        </div>
-        <div className="info">
-          <h3>{data.name}</h3>
-          <div className="point">
-            {top && (
-              <img src={index === 1 ? one : index === 2 ? two : three} alt="" />
-            )}
-            <p>{data.point} Points</p>
-          </div>
-        </div>
+    <div className={`lb-card ${RANK_CLASS[rank] || ""} ${isYou ? "your-rank-card" : ""}`}>
+      <div className="rank-num">#{rank}</div>
+      <div className="lb-avatar">
+        <img src={`/src/assets/Avatar/${data.image}.svg`} alt={data.name} onError={(e) => { e.target.style.display = "none"; }} />
       </div>
-      <div className="right">
-        <h1>{index}</h1>
+      <div className="lb-info">
+        <h3>{data.name} {isYou && <span style={{ color: "var(--red)", fontSize: "0.75rem" }}>(You)</span>}</h3>
+        <p>Community Responder</p>
       </div>
+      {MEDAL[rank] && (
+        <div className="medal">
+          <img src={MEDAL[rank]} alt={`Rank ${rank} medal`} />
+        </div>
+      )}
+      <div className="points-chip">{data.point ?? 0} pts</div>
     </div>
   );
 };
